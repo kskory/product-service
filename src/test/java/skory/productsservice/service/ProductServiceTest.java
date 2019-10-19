@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import skory.productsservice.dto.ProductDto;
-import skory.productsservice.excpetion.DuplicateSkuException;
+import skory.productsservice.exception.DuplicateSkuException;
 import skory.productsservice.model.Product;
 import skory.productsservice.repository.ProductRepository;
 

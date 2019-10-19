@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import skory.productsservice.dto.ProductDto;
-import skory.productsservice.excpetion.DuplicateSkuException;
+import skory.productsservice.exception.DuplicateSkuException;
 import skory.productsservice.service.ProductService;
 
 import java.time.LocalDateTime;

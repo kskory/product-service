@@ -3,7 +3,7 @@ package skory.productsservice.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import skory.productsservice.dto.ProductDto;
-import skory.productsservice.excpetion.DuplicateSkuException;
+import skory.productsservice.exception.DuplicateSkuException;
 import skory.productsservice.model.Product;
 import skory.productsservice.repository.ProductRepository;
 
