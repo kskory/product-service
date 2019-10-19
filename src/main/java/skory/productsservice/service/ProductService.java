@@ -45,7 +45,7 @@ public class ProductService {
 
 
     public Optional<ProductDto> findOne(String sku) {
-        return productRepository.findBySku(sku)
+        return productRepository.findBySkuAndDeletedIsFalse(sku)
                 .map(this::toDto);
     }
 
@@ -54,7 +54,7 @@ public class ProductService {
     }
 
     public Optional<ProductDto> update(String sku, ProductDto productDto) {
-        Optional<Product> product = productRepository.findBySku(sku);
+        Optional<Product> product = productRepository.findBySkuAndDeletedIsFalse(sku);
         return product
                 .map(productEntity -> updateValues(productEntity, productDto))
                 .map(productRepository::save)

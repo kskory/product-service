@@ -79,7 +79,7 @@ class ProductServiceTest {
 
     @Test
     void givenProductExist_whenUpdate_returnUpdatedProduct() {
-        when(productRepository.findBySku("111-222")).thenReturn(Optional.of(new Product(123, "111-222", "aaa", 100, LocalDateTime.now(clock), false)));
+        when(productRepository.findBySkuAndDeletedIsFalse("111-222")).thenReturn(Optional.of(new Product(123, "111-222", "aaa", 100, LocalDateTime.now(clock), false)));
         Product savedProduct = new Product(123, "111-233", "bbb", 111, LocalDateTime.now(clock), false);
         when(productRepository.save(any())).thenReturn(savedProduct);
 

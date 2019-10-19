@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByDeletedIsFalse();
 
-    Optional<Product> findBySku(String sku);
+    Optional<Product> findBySkuAndDeletedIsFalse(String sku);
 
     boolean existsBySku(String sku);
 
