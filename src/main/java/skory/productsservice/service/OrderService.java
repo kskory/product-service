@@ -40,7 +40,7 @@ public class OrderService {
 
     public OrderDto create(OrderDto order) {
         List<OrderItem> orderItems = order.getProducts().stream()
-                .map(productDto -> productService.findOne(productDto.getSku()).orElseThrow(ProductNotFoundException::new))
+                .map(productDto -> productService.findOne(productDto.getId()).orElseThrow(ProductNotFoundException::new))
                 .map(product -> OrderItem.builder().name(product.getName()).sku(product.getSku()).price(product.getPrice()).build())
                 .collect(Collectors.toList());
 

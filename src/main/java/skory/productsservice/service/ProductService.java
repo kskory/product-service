@@ -34,27 +34,34 @@ public class ProductService {
     }
 
     public ProductDto create(ProductDto productDto) {
-        if (productRepository.existsBySku(productDto.getSku())) {
-            throw new DuplicateSkuException("product with given SKU already exists");
-        }
+        validateSkuUnique(productDto.getSku());
 
         Product product = fromDto(productDto);
         product.setCreated(LocalDateTime.now(clock));
         return toDto(productRepository.save(product));
     }
 
+    private void validateSkuUnique(String sku) {
+        if (productRepository.existsBySku(sku)) {
+            throw new DuplicateSkuException("product with given SKU already exists");
+        }
+    }
 
-    public Optional<ProductDto> findOne(String sku) {
-        return productRepository.findBySkuAndDeletedIsFalse(sku)
+    public Optional<ProductDto> findOne(long productId) {
+        return productRepository.findByIdAndDeletedIsFalse(productId)
                 .map(this::toDto);
     }
 
-    public void delete(String sku) {
-        productRepository.markAsDeleted(sku);
+    public void delete(long productId) {
+        productRepository.markAsDeleted(productId);
     }
 
-    public Optional<ProductDto> update(String sku, ProductDto productDto) {
-        Optional<Product> product = productRepository.findBySkuAndDeletedIsFalse(sku);
+    public Optional<ProductDto> update(long productId, ProductDto productDto) {
+        Optional<Product> product = productRepository.findByIdAndDeletedIsFalse(productId);
+        product.map(Product::getSku)
+                .filter(existingSku -> !existingSku.equals(productDto.getSku()))
+                .ifPresent(this::validateSkuUnique);
+
         return product
                 .map(productEntity -> updateValues(productEntity, productDto))
                 .map(productRepository::save)
@@ -63,6 +70,7 @@ public class ProductService {
 
     private ProductDto toDto(Product product) {
         return ProductDto.builder()
+                .id(product.getId())
                 .sku(product.getSku())
                 .name(product.getName())
                 .price(product.getPrice())

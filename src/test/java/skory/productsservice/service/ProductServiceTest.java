@@ -72,18 +72,18 @@ class ProductServiceTest {
 
     @Test
     void givenProductDoesNotExist_whenUpdate_returnEmpty() {
-        Optional<ProductDto> maybeUpdated = productService.update("111-222", ProductDto.builder().build());
+        Optional<ProductDto> maybeUpdated = productService.update(123, ProductDto.builder().build());
 
         assertThat(maybeUpdated).isEmpty();
     }
 
     @Test
     void givenProductExist_whenUpdate_returnUpdatedProduct() {
-        when(productRepository.findBySkuAndDeletedIsFalse("111-222")).thenReturn(Optional.of(new Product(123, "111-222", "aaa", 100, LocalDateTime.now(clock), false)));
+        when(productRepository.findByIdAndDeletedIsFalse(123)).thenReturn(Optional.of(new Product(123, "111-222", "aaa", 100, LocalDateTime.now(clock), false)));
         Product savedProduct = new Product(123, "111-233", "bbb", 111, LocalDateTime.now(clock), false);
         when(productRepository.save(any())).thenReturn(savedProduct);
 
-        Optional<ProductDto> maybeUpdated = productService.update("111-222", ProductDto.builder().sku("111-233").name("bbb").price(111).build());
+        Optional<ProductDto> maybeUpdated = productService.update(123, ProductDto.builder().sku("111-233").name("bbb").price(111).build());
 
         verify(productRepository).save(savedProduct);
         assertThat(maybeUpdated).isPresent();
@@ -91,6 +91,6 @@ class ProductServiceTest {
     }
 
     private ProductDto asDto(Product product) {
-        return ProductDto.builder().sku(product.getSku()).name(product.getName()).price(product.getPrice()).created(product.getCreated()).build();
+        return ProductDto.builder().id(product.getId()).sku(product.getSku()).name(product.getName()).price(product.getPrice()).created(product.getCreated()).build();
     }
 }

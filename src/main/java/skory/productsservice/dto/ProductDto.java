@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 public class ProductDto {
 
+    private Long id;
+
     @NotEmpty
     private String sku;
 

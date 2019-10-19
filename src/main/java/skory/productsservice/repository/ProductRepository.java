@@ -14,11 +14,11 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByDeletedIsFalse();
 
-    Optional<Product> findBySkuAndDeletedIsFalse(String sku);
+    Optional<Product> findByIdAndDeletedIsFalse(long productId);
 
     boolean existsBySku(String sku);
 
     @Modifying
-    @Query("UPDATE Product p SET p.deleted = true WHERE p.sku = :sku")
-    void markAsDeleted(@Param("sku") String sku);
+    @Query("UPDATE Product p SET p.deleted = true WHERE p.id = :id")
+    void markAsDeleted(@Param("id") long id);
 }

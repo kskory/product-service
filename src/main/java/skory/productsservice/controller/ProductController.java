@@ -25,9 +25,9 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/{sku}")
-    public ResponseEntity<ProductDto> findOne(@PathVariable String sku) {
-        return ResponseEntity.of(productService.findOne(sku));
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDto> findOne(@PathVariable long productId) {
+        return ResponseEntity.of(productService.findOne(productId));
     }
 
     @GetMapping
@@ -40,13 +40,13 @@ public class ProductController {
         return productService.create(product);
     }
 
-    @PutMapping("/{sku}")
-    public ResponseEntity<ProductDto> update(@PathVariable String sku, @Valid @RequestBody ProductDto product) {
-        return ResponseEntity.of(productService.update(sku, product));
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductDto> update(@PathVariable long productId, @Valid @RequestBody ProductDto product) {
+        return ResponseEntity.of(productService.update(productId, product));
     }
 
-    @DeleteMapping("/{sku}")
-    public void delete(@PathVariable String sku) {
-        productService.delete(sku);
+    @DeleteMapping("/{productId}")
+    public void delete(@PathVariable long productId) {
+        productService.delete(productId);
     }
 }

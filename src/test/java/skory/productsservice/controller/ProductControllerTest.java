@@ -35,16 +35,16 @@ class ProductControllerTest {
 
     @Test
     public void givenProductDoesNotExist_whenFindOne_thenReturnNotFound() throws Exception {
-        mockMvc.perform(get("/v1/products/111-111"))
+        mockMvc.perform(get("/v1/products/111"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void givenProductExist_whenFindOne_thenReturnProduct() throws Exception {
-        ProductDto product = ProductDto.builder().sku("111-111").name("aaa").price(100).created(LocalDateTime.now()).build();
-        when(productService.findOne("111-111")).thenReturn(Optional.of(product));
+        ProductDto product = ProductDto.builder().id(123L).sku("111-111").name("aaa").price(100).created(LocalDateTime.now()).build();
+        when(productService.findOne(123)).thenReturn(Optional.of(product));
 
-        ResultActions resultActions = mockMvc.perform(get("/v1/products/111-111"))
+        ResultActions resultActions = mockMvc.perform(get("/v1/products/123"))
                 .andExpect(status().isOk());
 
         ProductDto returned = objectMapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), ProductDto.class);

@@ -27,7 +27,7 @@ public class ProductRepositoryTest {
     public void givenProductExists_whenFindBySku_thenReturnProduct() {
         Product saved = entityManager.persistAndFlush(givenProduct("111-111"));
 
-        Optional<Product> maybeFound = productRepository.findBySkuAndDeletedIsFalse("111-111");
+        Optional<Product> maybeFound = productRepository.findByIdAndDeletedIsFalse(saved.getId());
 
         assertThat(maybeFound).isPresent();
         maybeFound.ifPresent(found ->
@@ -37,7 +37,7 @@ public class ProductRepositoryTest {
 
     @Test
     public void givenProductDoesNotExist_whenFindBySku_thenReturnEmpty() {
-        Optional<Product> maybeFound = productRepository.findBySkuAndDeletedIsFalse("111-111");
+        Optional<Product> maybeFound = productRepository.findByIdAndDeletedIsFalse(1L);
 
         assertThat(maybeFound).isEmpty();
     }
@@ -62,7 +62,7 @@ public class ProductRepositoryTest {
     public void givenProductExists_whenMarkAsDeleted_thenDeletedFlagSet() {
         long productId = entityManager.persistAndFlush(givenProduct("111-111")).getId();
 
-        productRepository.markAsDeleted("111-111");
+        productRepository.markAsDeleted(productId);
         entityManager.clear();
 
         Optional<Product> updated = productRepository.findById(productId);
