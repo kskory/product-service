@@ -60,7 +60,7 @@ public class ProductService {
         Optional<Product> product = productRepository.findByIdAndDeletedIsFalse(productId);
         product.map(Product::getSku)
                 .filter(existingSku -> !existingSku.equals(productDto.getSku()))
-                .ifPresent(this::validateSkuUnique);
+                .ifPresent(p -> validateSkuUnique(productDto.getSku()));
 
         return product
                 .map(productEntity -> updateValues(productEntity, productDto))

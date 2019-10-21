@@ -41,7 +41,7 @@ public class OrderService {
     public OrderDto create(OrderDto order) {
         List<OrderItem> orderItems = order.getProducts().stream()
                 .map(productDto -> productService.findOne(productDto.getId()).orElseThrow(ProductNotFoundException::new))
-                .map(product -> OrderItem.builder().name(product.getName()).sku(product.getSku()).price(product.getPrice()).build())
+                .map(this::toOrderItem)
                 .collect(Collectors.toList());
 
         Order toSave = Order.builder()
@@ -50,8 +50,15 @@ public class OrderService {
                 .created(LocalDateTime.now(clock))
                 .build();
 
-
         return toDto(orderRepository.save(toSave));
+    }
+
+    private OrderItem toOrderItem(ProductDto product) {
+        return OrderItem.builder()
+                .name(product.getName())
+                .sku(product.getSku())
+                .price(product.getPrice())
+                .build();
     }
 
     private OrderDto toDto(Order order) {

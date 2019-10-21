@@ -25,7 +25,7 @@ public class ProductRepositoryTest {
 
     @Test
     public void givenProductExists_whenFindBySku_thenReturnProduct() {
-        Product saved = entityManager.persistAndFlush(givenProduct("111-111"));
+        Product saved = entityManager.persistAndFlush(productWith("111-111"));
 
         Optional<Product> maybeFound = productRepository.findByIdAndDeletedIsFalse(saved.getId());
 
@@ -44,7 +44,7 @@ public class ProductRepositoryTest {
 
     @Test
     public void givenProductExists_whenExistsBySku_thenReturnTrue() {
-        entityManager.persistAndFlush(givenProduct("111-111"));
+        entityManager.persistAndFlush(productWith("111-111"));
 
         boolean exists = productRepository.existsBySku("111-111");
 
@@ -60,7 +60,7 @@ public class ProductRepositoryTest {
 
     @Test
     public void givenProductExists_whenMarkAsDeleted_thenDeletedFlagSet() {
-        long productId = entityManager.persistAndFlush(givenProduct("111-111")).getId();
+        long productId = entityManager.persistAndFlush(productWith("111-111")).getId();
 
         productRepository.markAsDeleted(productId);
         entityManager.clear();
@@ -72,10 +72,10 @@ public class ProductRepositoryTest {
     @Test
     public void givenProducts_whenFindByDeletedIsFalse_thenReturnOnlyNotDeleted() {
         Arrays.asList(
-                givenProduct("111-111", false),
-                givenProduct("222-222", true),
-                givenProduct("333-333", false),
-                givenProduct("444-444", true)
+                productWith("111-111", false),
+                productWith("222-222", true),
+                productWith("333-333", false),
+                productWith("444-444", true)
         ).forEach(entityManager::persistAndFlush);
 
         List<Product> products = productRepository.findByDeletedIsFalse();
@@ -86,25 +86,25 @@ public class ProductRepositoryTest {
 
     @Test
     public void givenNegativePrice_whenSave_thenThrowException() {
-        Product product = givenProduct().price(-10).build();
+        Product product = product().price(-10).build();
 
         Assertions.assertThrows(ConstraintViolationException.class, () -> productRepository.save(product));
     }
 
     //more validation tests
 
-    public static Product givenProduct(String sku) {
-        return givenProduct(sku, false);
+    public static Product productWith(String sku) {
+        return productWith(sku, false);
     }
 
-    public static Product givenProduct(String sku, boolean isDeleted) {
-        return givenProduct()
+    public static Product productWith(String sku, boolean isDeleted) {
+        return product()
                 .sku(sku)
                 .deleted(isDeleted)
                 .build();
     }
 
-    public static Product.ProductBuilder givenProduct() {
+    public static Product.ProductBuilder product() {
         return Product.builder()
                 .name("one")
                 .sku("111-222")
