@@ -1,5 +1,6 @@
 package skory.productsservice.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,7 +11,6 @@ import skory.productsservice.dto.OrderDto;
 import skory.productsservice.service.OrderService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/orders")
@@ -28,8 +28,8 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public Optional<OrderDto> findOne(@PathVariable long orderId) {
-        return orderService.findOne(orderId);
+    public ResponseEntity<OrderDto> findOne(@PathVariable long orderId) {
+        return ResponseEntity.of(orderService.findOne(orderId));
     }
 
     @PostMapping()
